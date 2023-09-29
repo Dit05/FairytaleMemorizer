@@ -8,7 +8,7 @@ namespace Bemagoló {
 
     public static class BibliaismeretMediaWikiParser {
 
-        public static IEnumerable<Question> ParseText(TextReader reader) {
+        public static IEnumerable<QuestionAnswerPair> ParseText(TextReader reader) {
 
             bool endOfStream = false;
 
@@ -56,7 +56,7 @@ namespace Bemagoló {
                 look_for("Válasz: ");
                 string a = read_until('\n', '<');
 
-                yield return new Question() {
+                yield return new QuestionAnswerPair() {
                     QuestionText = q,
                     AnswerText = a
                 };

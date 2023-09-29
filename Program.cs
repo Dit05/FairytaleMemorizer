@@ -8,7 +8,7 @@ namespace Bemagoló {
 
         static void ConvertWallOfText(string srcPath) {
             using(System.IO.TextReader reader = new System.IO.StreamReader(System.IO.File.OpenRead(srcPath))) {
-                foreach(Question q in BibliaismeretMediaWikiParser.ParseText(reader)) {
+                foreach(QuestionAnswerPair q in BibliaismeretMediaWikiParser.ParseText(reader)) {
                     Console.WriteLine(q.ToString());
                 }
             }
