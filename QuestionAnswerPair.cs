@@ -37,9 +37,10 @@ namespace Bemagoló {
         }
 
 
-        public static IEnumerable<QuestionAnswerPair> ParseLines(System.IO.TextReader reader) {
+        public static async IAsyncEnumerable<QuestionAnswerPair> ParseLinesAsync(System.IO.TextReader reader) {
             while(true) {
-                string? line = reader.ReadLine();
+                string? line = await reader.ReadLineAsync();
+                await System.Threading.Tasks.Task.Delay(1);
                 if(line == null) break;
                 if(string.IsNullOrWhiteSpace(line)) continue;
 

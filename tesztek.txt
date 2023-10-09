@@ -1,0 +1,5 @@
+alma	piros
+banán	sárga
+körte	zöld
+szőlő (klasszik)	lila
+
