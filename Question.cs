@@ -44,7 +44,7 @@ namespace Bemagoló {
 
 
             public override Question AskQuestion(Random rand) {
-                List<QuestionAnswerPair> subList = qaps.MakeRandomSublist(choiceCount, rand);
+                List<QuestionAnswerPair> subList = qaps.MakeRandomSublist(Math.Min(choiceCount, qaps.Count), rand);
 
                 return new SelectMatchingAnswerQuestion(subList);
             }
