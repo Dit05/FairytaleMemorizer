@@ -50,7 +50,22 @@ namespace Bemagoló {
                         return;
                     }
 
-                    List<QuestionAnswerPair> questions = ReadQuestions(args[1]).Result;
+                    Task<List<QuestionAnswerPair>> loadTask = ReadQuestions(args[1]);
+                    int d = 0;
+                    Console.CursorVisible = false;
+                    while(!loadTask.IsCompleted) {
+                        const string DECOR = "|/-\\";
+                        Console.Write(DECOR[d]);
+                        try {
+                            Console.CursorLeft--;
+                        } catch(Exception) {}
+                        d++;
+                        d %= DECOR.Length;
+                        System.Threading.Thread.Sleep(50);
+                    }
+                    Console.CursorVisible = true;
+                    List<QuestionAnswerPair> questions = loadTask.Result;
+
                     Console.WriteLine($"Loaded {questions.Count} questions.");
 
                     Study(questions);
