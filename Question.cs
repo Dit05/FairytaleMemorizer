@@ -20,7 +20,7 @@ namespace Bemagoló {
     }
 
 
-    public class SelectMatchingAnswerQuestion : Question {
+    class SelectMatchingAnswerQuestion : Question {
 
         public sealed class Asker : QuestionAsker, IUserConfigurableAsker {
 
@@ -88,7 +88,7 @@ namespace Bemagoló {
 
     }
 
-    public class FillBlankQuestion : Question {
+    class FillBlankQuestion : Question {
 
         public sealed class Asker : QuestionAsker, IConcreteAsker {
 

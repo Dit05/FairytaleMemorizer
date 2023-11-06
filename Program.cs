@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Bemagoló {
 
-    public static class Program {
+    static class Program {
 
         static void ConvertWallOfText(string srcPath) {
             using(System.IO.TextReader reader = new System.IO.StreamReader(System.IO.File.OpenRead(srcPath))) {
@@ -82,7 +82,7 @@ namespace Bemagoló {
                     break;
 
                 default:
-                    Console.WriteLine("Specify what you want to do:\n\nstudy: Answer questions.\nconvert: Convert the notes exported as MediaWiki markup into a question file.");
+                    Console.WriteLine("Specify what you want to do:\n\nstudy: Answer questions.\nconvert: Convert the bibliaismeret notes exported as MediaWiki markup into a question file.");
                     break;
             }
 

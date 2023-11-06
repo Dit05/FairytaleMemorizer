@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Bemagoló {
 
-    public static class BibliaismeretMediaWikiParser {
+    static class BibliaismeretMediaWikiParser {
 
         public static IEnumerable<QuestionAnswerPair> ParseText(TextReader reader) {
 
