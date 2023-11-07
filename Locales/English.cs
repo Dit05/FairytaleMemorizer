@@ -23,7 +23,7 @@ namespace Bemagoló.Locales {
 
         public override string NoQuestionTypesEnabled => "No question types are enabled. Exiting.";
 
-        public override string Starting => "Starting. Type !quit to stop.";
+        public override string Starting(string quitCmd) => $"Starting. Type {quitCmd} to stop.";
 
         public override string CorrectAnswer => "That's correct.";
         public override string IncorrectAnswer => "That's not correct.";

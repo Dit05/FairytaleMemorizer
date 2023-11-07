@@ -23,7 +23,7 @@ namespace Bemagoló {
 
         public abstract string NoQuestionTypesEnabled { get; }
 
-        public abstract string Starting { get; }
+        public abstract string Starting(string quitCmd);
 
         public abstract string CorrectAnswer { get; }
         public abstract string IncorrectAnswer { get; }

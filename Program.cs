@@ -130,7 +130,10 @@ namespace Bemagoló {
                 return;
             }
 
-            Console.WriteLine($"{locale.Starting}\n\n");
+
+            const string QUIT_CMD = "!quit";
+
+            Console.WriteLine($"{locale.Starting(QUIT_CMD)}\n\n");
 
             int correctAnswers = 0;
             int incorrectAnswers = 0;
@@ -141,7 +144,7 @@ namespace Bemagoló {
                 Console.WriteLine(qu.GetAskString());
 
                 string? inp = Console.ReadLine();
-                if(inp == null || inp.Trim() == "!quit") break;
+                if(inp == null || inp.Trim() == QUIT_CMD) break;
 
                 if(qu.IsAnswerGood(inp)) {
                     Console.WriteLine(locale.CorrectAnswer);
