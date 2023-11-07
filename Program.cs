@@ -8,6 +8,10 @@ namespace Bemagoló {
 
     static class Program {
 
+        static Locale locale = new Locales.English();
+        public static Locale ActiveLocale => locale;
+
+
         static void ConvertWallOfText(string srcPath) {
             using(System.IO.TextReader reader = new System.IO.StreamReader(System.IO.File.OpenRead(srcPath))) {
                 foreach(QuestionAnswerPair q in BibliaismeretMediaWikiParser.ParseText(reader)) {
@@ -46,7 +50,7 @@ namespace Bemagoló {
             switch(command) {
                 case "study":
                     if(args.Length < 2) {
-                        Console.WriteLine("Usage: study QUESTIONFILE\n\nThe question file's lines should each have a question and an answer separated by a <tab>.");
+                        Console.WriteLine($"{locale.Usage}: study QUESTIONFILE\n\n{locale.StudyHelp}");
                         return;
                     }
 
@@ -64,9 +68,18 @@ namespace Bemagoló {
                         System.Threading.Thread.Sleep(50);
                     }
                     Console.CursorVisible = true;
-                    List<QuestionAnswerPair> questions = loadTask.Result;
 
-                    Console.WriteLine($"Loaded {questions.Count} questions.");
+                    List<QuestionAnswerPair> questions;
+                    try {
+                        questions = loadTask.Result;
+                    } catch(AggregateException) {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"{locale.InvalidQuestionFile}");
+                        Console.ResetColor();
+                        throw;
+                    }
+
+                    Console.WriteLine(locale.LoadFinished(questions.Count));
 
                     Study(questions);
 
@@ -74,7 +87,7 @@ namespace Bemagoló {
 
                 case "convert":
                     if(args.Length != 2) {
-                        Console.WriteLine("Usage: convert SOURCE\n\nThe input file should be the bibliaismeret wall of text docx exported as MediaWiki markup. Converted questions will be written to stdout.");
+                        Console.WriteLine($"{locale.Usage}: convert SOURCE\n\n{locale.ConvertHelp}");
                         return;
                     }
 
@@ -82,7 +95,7 @@ namespace Bemagoló {
                     break;
 
                 default:
-                    Console.WriteLine("Specify what you want to do:\n\nstudy: Answer questions.\nconvert: Convert the bibliaismeret notes exported as MediaWiki markup into a question file.");
+                    Console.WriteLine($"{locale.WhatDoYouWant}:\n\nstudy: {locale.StudyBrief}\nconvert: {locale.ConvertBrief}");
                     break;
             }
 
@@ -96,7 +109,7 @@ namespace Bemagoló {
 
             void setup_asker(QuestionAsker asker) {
                 if(asker is IConcreteAsker concreteAsker) {
-                    Console.WriteLine($"\n{concreteAsker.Title}\n{concreteAsker.Description}\n\nWith what weight should this question type be present? (0 to disable this type)");
+                    Console.WriteLine($"\n{concreteAsker.Title}\n{concreteAsker.Description}\n\n{locale.AskQuestionWeightOrDisable}");
 
                     double weight = PromptChecked<double>(double.TryParse);
                     if(weight == 0) return;
@@ -107,17 +120,17 @@ namespace Bemagoló {
                 }
             }
 
-            Console.WriteLine("\n\n--- Setup ---\n\n");
+            Console.WriteLine($"\n\n--- {locale.SetupTitle} ---\n\n");
 
             setup_asker(new SelectMatchingAnswerQuestion.Asker());
             setup_asker(new FillBlankQuestion.Asker());
 
             if(randAsker.AskerCount == 0) {
-                Console.WriteLine("No question types are enabled. Exiting.");
+                Console.WriteLine(locale.NoQuestionTypesEnabled);
                 return;
             }
 
-            Console.WriteLine("Starting. Type !quit to stop.\n\n");
+            Console.WriteLine($"{locale.Starting}\n\n");
 
             int correctAnswers = 0;
             int incorrectAnswers = 0;
@@ -131,11 +144,13 @@ namespace Bemagoló {
                 if(inp == null || inp.Trim() == "!quit") break;
 
                 if(qu.IsAnswerGood(inp)) {
-                    Console.WriteLine("That's correct.");
+                    Console.WriteLine(locale.CorrectAnswer);
                     correctAnswers++;
                 } else {
-                    Console.WriteLine($"That's not correct.\nA correct answer would've been: '{qu.GetCorrectAnswer()}'.");
-                    Console.WriteLine("(press any key to continue)");
+                    Console.WriteLine(locale.IncorrectAnswer);
+                    Console.WriteLine();
+                    Console.WriteLine(locale.ExampleCorrectAnswer(qu.GetCorrectAnswer()));
+                    Console.WriteLine(locale.PressAnyKeyToContinue);
                     Console.ReadKey(intercept: true);
                     incorrectAnswers++;
                 }
@@ -143,12 +158,12 @@ namespace Bemagoló {
             }
 
             int total = correctAnswers + incorrectAnswers;
-            Console.WriteLine("\n--- Summary ---");
+            Console.WriteLine($"\n--- {locale.SummaryTitle} ---");
             if(total > 0) {
-                Console.WriteLine($"Correct answers: {correctAnswers}, incorrect: {incorrectAnswers}");
-                Console.WriteLine($"You answered a total of {total} questions, with an accuracy of {(int)Math.Round(correctAnswers * 100 / (double)total)}%.");
+                Console.WriteLine(locale.CorrectIncorrectTotals(correctAnswers, incorrectAnswers));
+                Console.WriteLine(locale.TotalAndPercentage(total, (int)Math.Round(correctAnswers * 100 / (double)total)));
             } else {
-                Console.WriteLine("You haven't answered any questions.");
+                Console.WriteLine(locale.NoQuestionsAnswered);
             }
 
         }

@@ -24,11 +24,11 @@ namespace Bemagoló {
 
         public sealed class Asker : QuestionAsker, IUserConfigurableAsker {
 
-            public string Title => "Multiple choice question";
-            public string Description => "Select the correct answer to the question.";
+            public string Title => Program.ActiveLocale.SelectMatchingQuestionTitle;
+            public string Description => Program.ActiveLocale.SelectMatchingQuestionDescription;
 
             public void Configure() {
-                Console.WriteLine("How many choices per question? Enter a positive integer.");
+                Console.WriteLine(Program.ActiveLocale.SelectMatchingQuestionConfigChoiceCount);
                 ChoiceCount = Program.PromptChecked<int>(int.TryParse);
             }
 
@@ -69,7 +69,8 @@ namespace Bemagoló {
         public override string GetAskString() {
             var sb = new StringBuilder();
 
-            sb.Append("Melyik lehet a párja?\n\n");
+            sb.Append(Program.ActiveLocale.SelectMatchingQuestionAsk);
+            sb.Append("\n\n");
             sb.Append(qaps[correctIndex].QuestionText);
             sb.Append("\n\n");
 
@@ -92,8 +93,8 @@ namespace Bemagoló {
 
         public sealed class Asker : QuestionAsker, IConcreteAsker {
 
-            public string Title => "Missing word question";
-            public string Description => "Enter a word to fill the blank.";
+            public string Title => Program.ActiveLocale.FillBlankQuestionTitle;
+            public string Description => Program.ActiveLocale.FillBlankQuestionDescription;
 
             public override Question AskQuestion(Random rand) {
                 return new FillBlankQuestion(qaps[rand.Next(qaps.Count)]);
@@ -137,7 +138,7 @@ namespace Bemagoló {
 
             string blankedString = new string(chars);
 
-            return $"Mi lehet a hiányzó rész?\n\n{qap.QuestionText}\n\n{blankedString}";
+            return $"{Program.ActiveLocale.FillBlankQuestionAsk}\n\n{qap.QuestionText}\n\n{blankedString}";
         }
 
         public override bool IsAnswerGood(string answer) {
