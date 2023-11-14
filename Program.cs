@@ -8,8 +8,23 @@ namespace Bemagoló {
 
     static class Program {
 
-        static Locale locale = new Locales.English();
+        static Locale locale;
         public static Locale ActiveLocale => locale;
+
+
+        static Program() {
+            System.Globalization.CultureInfo culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+
+            SetLocale(culture.TwoLetterISOLanguageName);
+        }
+
+        [MemberNotNull(nameof(locale))]
+        static void SetLocale(string isoId) {
+            locale = isoId switch {
+                "hu" => new Locales.Magyar(),
+                _ => new Locales.English()
+            };
+        }
 
 
         static void ConvertWallOfText(string srcPath) {
@@ -43,18 +58,36 @@ namespace Bemagoló {
 
         public static void Main( string[] args ) {
 
+            var argList = new List<string>(args);
+
+            // HACK-y argument implementation (TODO DitoDisco.CommandLineArguments amikor kész)
+            while(argList.Count > 0) {
+                string arg = argList[0];
+                if(!arg.StartsWith("--")) break;
+                argList.RemoveAt(0);
+
+                switch(arg) {
+                    case "--lang":
+                    case "--nyelv":
+                        if(argList.Count == 0) throw new Exception("--lang requires an option following it.");
+                        SetLocale(argList[0]);
+                        argList.RemoveAt(0);
+                        break;
+                }
+            }
+
             string command = "";
-            if(args.Length > 0) command = args[0];
+            if(argList.Count > 0) command = argList[0];
 
 
             switch(command) {
                 case "study":
-                    if(args.Length < 2) {
+                    if(argList.Count < 2) {
                         Console.WriteLine($"{locale.Usage}: study QUESTIONFILE\n\n{locale.StudyHelp}");
                         return;
                     }
 
-                    Task<List<QuestionAnswerPair>> loadTask = ReadQuestions(args[1]);
+                    Task<List<QuestionAnswerPair>> loadTask = ReadQuestions(argList[1]);
                     int d = 0;
                     Console.CursorVisible = false;
                     while(!loadTask.IsCompleted) {
@@ -86,12 +119,12 @@ namespace Bemagoló {
                     break;
 
                 case "convert":
-                    if(args.Length != 2) {
+                    if(argList.Count != 2) {
                         Console.WriteLine($"{locale.Usage}: convert SOURCE\n\n{locale.ConvertHelp}");
                         return;
                     }
 
-                    ConvertWallOfText(args[1]);
+                    ConvertWallOfText(argList[1]);
                     break;
 
                 default:
