@@ -34,7 +34,7 @@ namespace Bemagoló.Locales {
 
         public override string SummaryTitle => "Summary";
         public override string CorrectIncorrectTotals(int correctAnswers, int incorrectAnswers) => $"Correct answers: {correctAnswers}, incorrect: {incorrectAnswers}";
-        public override string TotalAndPercentage(int total, int percentage) => $"You answered a total of {total} questions, with an accuracy of {percentage}%.";
+        public override string TotalAndPercentage(int total, int percentage) => $"You answered a total of {total} questions, that's an accuracy of {percentage}%.";
         public override string NoQuestionsAnswered => "You haven't answered any questions.";
 
 

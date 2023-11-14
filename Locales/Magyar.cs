@@ -34,7 +34,7 @@ namespace Bemagoló.Locales {
 
         public override string SummaryTitle => "Összefoglalás";
         public override string CorrectIncorrectTotals(int correctAnswers, int incorrectAnswers) => $"Helyes válaszok: {correctAnswers}, helytelen: {incorrectAnswers}";
-        public override string TotalAndPercentage(int total, int percentage) => $"Összesen {total} kérdést válaszoltál meg, {percentage}%-os pontossággal.";
+        public override string TotalAndPercentage(int total, int percentage) => $"Összesen {total} kérdést válaszoltál meg, ez {percentage}%-os pontosság.";
         public override string NoQuestionsAnswered => "Egy kérdést sem válaszoltál meg.";
 
 
