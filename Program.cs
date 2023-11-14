@@ -58,6 +58,8 @@ namespace Bemagoló {
 
         public static void Main( string[] args ) {
 
+            Console.WriteLine($"v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version}");
+
             var argList = new List<string>(args);
 
             // HACK-y argument implementation (TODO DitoDisco.CommandLineArguments amikor kész)
